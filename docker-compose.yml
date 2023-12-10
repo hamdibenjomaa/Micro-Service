@@ -1,0 +1,128 @@
+version: "24.0.6"
+services:
+
+  Eureka:
+    build: C:\Users\hamdi\Desktop\projet\Eureka
+    ports:
+      - "8761:8761"
+    hostname: Eureka
+    image: "eureka"
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://Eureka:8761/eureka/
+
+  magasin:
+    build: C:\Users\hamdi\Desktop\projet\Magasin
+    ports:
+      - "8081:8081"
+    hostname: magasin
+    image: "magasin"
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://Eureka:8761/eureka/
+      - SPRING_DATASOURCE_URL=jdbc:mysql://docker-mysql_1:3306/MagasinDB?autoReconnect=true&useSSL=false
+    depends_on:
+      - Eureka
+      - docker-mysql_1
+
+  docker-mysql_1:
+    image: "mysql:5.6"
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=1
+      - MYSQL_DATABASE=MagasinDB
+    ports:
+      - 3301:3306
+
+  produit:
+    build: C:\Users\hamdi\Desktop\projet\Produit
+    ports:
+      - "8082:8082"
+    hostname: produit
+    image: "produit"
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://Eureka:8761/eureka/
+      - SPRING_DATASOURCE_URL=jdbc:mysql://docker-mysql_2:3306/ProduitDB?autoReconnect=true&useSSL=false
+    depends_on:
+      - Eureka
+      - docker-mysql_2
+
+  docker-mysql_2:
+    image: "mysql:5.6"
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=1
+      - MYSQL_DATABASE=ProduitDB
+    ports:
+      - 3302:3306
+
+  fournisseur:
+    build: C:\Users\hamdi\Desktop\projet\Fournisseur
+    ports:
+      - "8083:8083"
+    hostname: fournisseur
+    image: "fournisseur"
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://Eureka:8761/eureka/
+      - SPRING_DATASOURCE_URL=jdbc:mysql://docker-mysql_3:3306/FournisseurDB?autoReconnect=true&useSSL=false
+    depends_on:
+      - Eureka
+      - docker-mysql_3
+
+  docker-mysql_3:
+    image: "mysql:5.6"
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=1
+      - MYSQL_DATABASE=FournisseurDB
+    ports:
+      - 3303:3306
+
+  employe:
+    build: C:\Users\hamdi\Desktop\projet\Employe
+    ports:
+      - "8084:8084"
+    hostname: employe
+    image: "employe"
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://Eureka:8761/eureka/
+      - SPRING_DATASOURCE_URL=jdbc:mysql://docker-mysql_4:3306/EmployeDB?autoReconnect=true&useSSL=false
+    depends_on:
+      - Eureka
+      - docker-mysql_4
+
+  docker-mysql_4:
+    image: "mysql:5.6"
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=1
+      - MYSQL_DATABASE=EmployeDB
+    ports:
+      - 3304:3306
+
+  categorie:
+    build: C:\Users\hamdi\Desktop\projet\Categorie
+    ports:
+      - "8085:8085"
+    hostname: categorie
+    image: "categorie"
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://Eureka:8761/eureka/
+      - SPRING_DATASOURCE_URL=jdbc:mysql://docker-mysql_5:3306/CategorieDB?autoReconnect=true&useSSL=false
+    depends_on:
+      - Eureka
+      - docker-mysql_5
+
+  docker-mysql_5:
+    image: "mysql:5.6"
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=1
+      - MYSQL_DATABASE=CategorieDB
+    ports:
+      - 3305:3306
+
+  Gateway:
+    image: "gateway"
+    container_name: Gateway
+    build: C:\Users\hamdi\Desktop\projet\Gateway
+    hostname: Gateway
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://Eureka:8761/eureka/
+    ports:
+      - "8088:8088"
+    depends_on:
+      - Eureka
